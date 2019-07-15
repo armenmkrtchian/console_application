@@ -1,7 +1,7 @@
 <?php
+require_once ('vendor/connect.php');
 
-function export($conn){
-
+function export($conn,$argv){
 
 $tables = array();
 $result = mysqli_query($conn,"SHOW TABLES");
@@ -33,8 +33,18 @@ foreach($tables as $table){
 }
 
 #-----Save file
-    $dateCurrent = date('Y\-m\-d\-H:i:s');
-$handle = fopen("dump-file-$dateCurrent.sql","w+");
+require_once 'vendor/validation.php';
+    $alod = validFilename($argv);
+
+//    $fileName = isset($argv[4]) ? $argv[4] : $argv[3];
+//    $validFileName = preg_match('/[\w].sql$/', $fileName);
+//    if ($validFileName !== 1) {
+//        die("ERROR: Wrong file extension!\n");
+//    }
+//    $dateCurrent = date('Y\-m\-d\-H:i:s');
+//    $fileNameDataCurrent = "dump-file-$dateCurrent.sql";
+
+$handle = fopen($alod,"w+");
 fwrite($handle,$return);
 fclose($handle);
 echo "Successfully backed up\n";
